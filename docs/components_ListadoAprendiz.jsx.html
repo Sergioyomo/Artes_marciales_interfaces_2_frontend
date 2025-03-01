@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/ListadoAprendiz.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/ListadoAprendiz.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import {Box} from "@mui/material";
+import { apiUrl } from '../config';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import Button from "@mui/material/Button";
+import { useNavigate } from "react-router";
+
+/**
+ * Componente que muestra una lista de aprendices en una tabla.
+ * @component
+ */
+function ListadoAprendiz() {
+  const [rows, setRows] = useState([]);
+  const navigate = useNavigate();
+
+  /**
+   * Hook de efecto que se ejecuta al montar el componente.
+   * Obtiene la lista de aprendices desde la API y actualiza el estado.
+   */
+  useEffect(() => {
+    async function getAprendiz() {
+      let response = await fetch(apiUrl + "/aprendiz");
+
+      if (response.ok) {
+        let data = await response.json();
+        setRows(data.datos);
+      }
+    }
+
+    getAprendiz();
+  }, []); // Se ejecuta solo en el primer renderizado
+
+  /**
+   * Maneja la eliminación de un aprendiz.
+   * @param {number} idAprendiz - El ID del aprendiz a eliminar.
+   */
+  const handleDelete = async (idAprendiz) => {
+    let response = await fetch(apiUrl + "/aprendiz/" + idAprendiz, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      // Utilizando filter creo un array sin el plato borrado
+      const aprendizTrasBorrado = rows.filter(
+        (aprendiz) => aprendiz.idAprendiz != idAprendiz
+      );
+      // Establece los datos de nuevo para provocar un renderizado
+      setRows(aprendizTrasBorrado);
+    }
+  };
+
+  return (
+    &lt;>
+      &lt;Typography variant="h4" align="center" sx={{ mt: 2 }}>
+        Listado de aprendices
+      &lt;/Typography>
+
+      &lt;Box sx={{ mx: 4 }}>
+        &lt;TableContainer component={Paper} sx={{ mt: 2 }}>
+          &lt;Table aria-label="simple table">
+            &lt;TableHead>
+              &lt;TableRow>
+                &lt;TableCell>idAprendiz&lt;/TableCell>
+                &lt;TableCell>nombre&lt;/TableCell>
+                &lt;TableCell>fecha_nacimiento&lt;/TableCell>
+                &lt;TableCell>cuota&lt;/TableCell>
+                &lt;TableCell>idSensei&lt;/TableCell>
+                &lt;TableCell>pagado&lt;/TableCell>
+                &lt;TableCell>ELIMINAR&lt;/TableCell>
+                &lt;TableCell>EDITAR&lt;/TableCell>
+              &lt;/TableRow>
+            &lt;/TableHead>
+            &lt;TableBody>
+              {rows.map((row) => (
+                &lt;TableRow
+                  key={row.idAprendiz}
+                  sx={{ "&amp;:last-child td, &amp;:last-child th": { border: 0 } }}
+                >
+                  &lt;TableCell>{row.idAprendiz}&lt;/TableCell>
+                  &lt;TableCell>{row.nombre}&lt;/TableCell>
+                  &lt;TableCell>{row.fecha_nacimiento}&lt;/TableCell>
+                  &lt;TableCell>{row.cuota}&lt;/TableCell>
+                  &lt;TableCell>{row.idSensei}&lt;/TableCell>
+                  &lt;TableCell>{row.pagado==1?"si":"no"}&lt;/TableCell>
+                  &lt;TableCell>
+                    &lt;Button
+                      variant="contained"
+                      onClick={() => handleDelete(row.idAprendiz)}
+                      color="error"
+                    >
+                      &lt;DeleteForeverIcon fontSize="small" />
+                    &lt;/Button>
+                  &lt;/TableCell>
+                  &lt;TableCell>
+                    &lt;Button
+                      variant="contained"
+                      onClick={() => navigate("/modificarAprendiz/" + row.idAprendiz)}
+                    >
+                      &lt;EditNoteIcon fontSize="small" />
+                    &lt;/Button>
+                  &lt;/TableCell>
+                &lt;/TableRow>
+              ))}
+            &lt;/TableBody>
+          &lt;/Table>
+        &lt;/TableContainer>
+      &lt;/Box>
+    &lt;/>
+  );
+}
+
+export default ListadoAprendiz;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#AltaAprendiz">AltaAprendiz</a></li><li><a href="global.html#AltaSensei">AltaSensei</a></li><li><a href="global.html#Carrusel">Carrusel</a></li><li><a href="global.html#Descripcion">Descripcion</a></li><li><a href="global.html#Footer">Footer</a></li><li><a href="global.html#GraficaSenseis">GraficaSenseis</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#ListadoAprendiz">ListadoAprendiz</a></li><li><a href="global.html#ListadoSensei">ListadoSensei</a></li><li><a href="global.html#Menu">Menu</a></li><li><a href="global.html#ModificarAprendiz">ModificarAprendiz</a></li><li><a href="global.html#ModificarSensei">ModificarSensei</a></li><li><a href="global.html#PaginaError">PaginaError</a></li><li><a href="global.html#generatePDF">generatePDF</a></li><li><a href="global.html#router">router</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Sat Mar 01 2025 17:15:32 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
